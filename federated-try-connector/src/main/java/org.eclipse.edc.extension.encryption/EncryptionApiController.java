@@ -33,6 +33,7 @@ import org.eclipse.edc.spi.monitor.Monitor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,15 +42,13 @@ import java.util.List;
 public class EncryptionApiController {
 
     private static int confi = 0;
-    private static HashMap da = null;
+    private static final HashMap DA = null;
 
     private static String pfad = null;
-    private static HashMap dump = null;
-
-    private static HashMap m = null;
+    private static byte[] dump = null;
 
     public static void configset(String path) throws JepException {
-        if (confi == 0) { 
+        if (confi == 0) {
             jep.JepConfig jepConf = new JepConfig();
 
             jepConf.addIncludePaths(path);
@@ -63,39 +62,16 @@ public class EncryptionApiController {
         }
     }
 
-    public static HashMap runScript(String datei, String mode) throws JepException {
+    public static String runScript(String datei, String mode) throws JepException {
         configset(pfad);
-        if (mode.equals("train")) {
-            try (Interpreter interp = new SharedInterpreter()) {
-                String scriptPath = pfad + datei;
-                System.out.println(scriptPath);
-                interp.runScript(scriptPath);
-                System.out.println("runScript");
-                Object vectors = interp.getValue("weights_lists");
-                Object context = interp.getValue("ctx");
-                String vec = vectors.toString();
-                HashMap<String, Object> datavec = new HashMap<>();
+        try (Interpreter interp = new SharedInterpreter()) {
+            String scriptPath = pfad + datei;
+            interp.runScript(scriptPath);
+        } catch (JepException e) {
+            System.out.println(e.getMessage());
 
-                datavec.put("encrypted", vec);
-                datavec.put("context", context);
-                System.out.println(datavec);
-                return datavec;
-            } catch (JepException e) {
-                System.out.println(e.getMessage());
-
-                /* Hier geben wir die Aufruferliste aus */
-                e.printStackTrace();
-            }
-        } else {
-            try (Interpreter interp = new SharedInterpreter()) {
-                String scriptPath = pfad + datei;
-                interp.runScript(scriptPath);
-            } catch (JepException e) {
-                System.out.println(e.getMessage());
-
-                /* Hier geben wir die Aufruferliste aus */
-                e.printStackTrace();
-            }
+            /* Hier geben wir die Aufruferliste aus */
+            e.printStackTrace();
         }
         return null;
     }
@@ -127,10 +103,10 @@ public class EncryptionApiController {
         this.monitor = monitor;
     }
 
-    //Ein Endpunkt für das erste Model und danach einen anderen
+
     @POST
     @Consumes({MediaType.APPLICATION_OCTET_STREAM})
-    @Path("init")
+    @Path("input")
     public String learn(byte[] body) {
         File file = new File("model.pt"); //Datei, in die geschrieben werden soll
         try {
@@ -143,55 +119,24 @@ public class EncryptionApiController {
         return "Received model";
     }
 
-    @POST
-    @Consumes({MediaType.APPLICATION_OCTET_STREAM})
-    @Path("input")
-    public String learn2(byte[] body) {
-        File file = new File("vectors.txt"); //Datei, in die geschrieben werden soll
-        try {
-            FileOutputStream writer = new FileOutputStream(file); //Erzeugen eines Writers für Textdateien
-            writer.write(body);
-        } catch (IOException e) {
-            // Handle Ausnahmen entsprechend...
-            e.printStackTrace();
-        }
-        return "Received model";
-    }
-
-    @GET
-    @Path("inittrain")
-    public HashMap train() throws JepException, IOException {
-        String datei = "/training.py";
-        HashMap daen = runScript(datei, "train");
-        System.out.println("Trained model locally");
-        //Einlesen des Modells und abspeichern in der Variablen
-        //String fileName = "model.pt";
-        //byte[] bytes = Files.readAllBytes(java.nio.file.Path.of(fileName));
-        //da = daen;
-        //System.out.println(da);
-        m = daen;
-        return daen;
-    }
-
-    //Wirklich beide Endpunkte nötig?
     @GET
     @Path("train")
-    public HashMap train2() throws JepException, IOException {
-        String datei = "/training2.py";
-        HashMap daen = runScript(datei, "train");
+    public byte[] train() throws JepException, IOException {
+        String datei = "/training.py";
+        runScript(datei, "train");
         System.out.println("Trained model locally");
         //Einlesen des Modells und abspeichern in der Variablen
-        //String fileName = "model.pt";
-        //byte[] bytes = Files.readAllBytes(java.nio.file.Path.of(fileName));
-        dump = daen;
+        String fileName = "model.pt";
+        byte[] bytes = Files.readAllBytes(java.nio.file.Path.of(fileName));
+        dump = bytes;
         System.out.println(dump);
         return dump;
     }
 
     @GET
     @Path("update")
-    public HashMap up() throws JepException {
-        return m;
+    public byte[] up() throws JepException {
+        return dump;
     }
 
 

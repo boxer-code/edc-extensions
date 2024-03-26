@@ -72,11 +72,8 @@ def avg():
         print(average_weights)
         average_model = ConvNet()
         average_model.load_state_dict(average_weights)
-        torch.save(average_model.state_dict(), "model.pt")
-        global dumped
-        dumped = pickle.dumps(average_model.state_dict())
-        global here
-        here = "updated"
+        torch.save(model.state_dict(), "model.pt")
+        dumped = pickle.dumps(model.state_dict())
         return "Es wurde erfolgreich ein geupdatetes Model erzeugt!"
 
 #Erst in Datei und dann noch ein Endpunkt zum Verschicken
@@ -86,8 +83,6 @@ def modeltest():
     torch.save(model.state_dict(), "model.pt")
     global dumped
     dumped = pickle.dumps(model.state_dict())
-    global here
-    here = "initialize"
     #pickload = pickle.loads(dumped)
     #buffer = io.BytesIO()
     #torch.save(pickload, buffer)
@@ -104,13 +99,11 @@ def modeltest():
 @app.get("/model")
 def getmodel():
     #Jedes Mal wenn das Model angefordert wird, wird von einem neuen Client ausgegangen
-    print(here)
     return dumped
 
-@app.get("/fedavgenc")
-def learnenc():
-    with open(filename, 'rb') as f:
-        model_bytes = f.read()
+@app.get("/learn")
+def learn():
+    data = req
     vectors = []
     #Jeden Vektor wieder b64 dekodieren
     for d in data['ckks_vector']:
@@ -127,26 +120,6 @@ def learnenc():
         enc_vec = ts.ckks_vector_from(ctx_d, vec)
         enc_v.append(enc_vec)
     print("<p>There are vectors again!</p>")
-
-@app.get("/learn")
-def learn():
-    data = req
-    vectors = []
-    #Jeden Vektor wieder b64 dekodieren
-    for d in data['ckks_vector']: 
-        ck_vector = b64decode(d)
-        vectors.append(ck_vector)
-    window = data['windows']
-    #Kontext dekodieren
-    ctx = b64decode(data['context'])
-    #Kontext deserialisieren
-    ctx_d = ts.context_from(ctx)
-    enc_v = []
-    #Rekonstruieren der Vektoren
-    for vec in vectors:
-       enc_vec = ts.ckks_vector_from(ctx_d, vec) 
-       enc_v.append(enc_vec)
-    print("<p>There are vectors again!</p>")
     #Liste mit verschlüsselten Vektoren env_v
     enc_model = EncConvNet(model)
     print(enc_model)
@@ -156,9 +129,9 @@ def learn():
         vec = enc.serialize()
         vec_new = b64encode(vec).decode()
         learned.append(vec_new)
-    
+
     data = {
-        "learned_data": learned, 
+        "learned_data": learned,
         "context" : data['context']
     }
     global encrypted_result
@@ -182,7 +155,7 @@ def enc_p():
     data = request.get_json()
     vectors = []
     #Jeden Vektor wieder b64 dekodieren
-    for d in data['ckks_vector']: 
+    for d in data['ckks_vector']:
         ck_vector = b64decode(d)
         vectors.append(ck_vector)
     #Kontext dekodieren
@@ -192,9 +165,9 @@ def enc_p():
     enc_v = []
     #Rekonstruieren der Vektoren
     for vec in vectors:
-       enc_vec = ts.ckks_vector_from(ctx_d, vec) 
-       #enc_vec.decrypt()
-       enc_v.append(enc_vec)
+        enc_vec = ts.ckks_vector_from(ctx_d, vec)
+        #enc_vec.decrypt()
+        enc_v.append(enc_vec)
     #Liste mit verschlüsselten Vektoren env_v
     enc_model = EncConvNet(model)
     enc_learned = enc_test(enc_v, enc_model)
@@ -203,7 +176,7 @@ def enc_p():
         vec = enc.serialize()
         vec_new = b64encode(vec).decode()
         learned.append(vec_new)
-    
+
     data = {
         "learned_data": learned
     }

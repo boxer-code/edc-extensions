@@ -5,8 +5,6 @@ import pickle
 import numpy as np
 import convnet as co
 import io
-from base64 import b64encode
-import tenseal as ts
 
 #torch.manual_seed(73)
 
@@ -62,87 +60,7 @@ criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 # model muss jedes Mal geupdated werden, transport?
 model = train(model, train_loader, criterion, optimizer, 10)
-#torch.save(model.state_dict(), "model.pt")
-weights = []
-param_ten = []
-for param_tensor in model.state_dict():
-    print(param_tensor)
-    param_ten.append(param_tensor)
-    weights.append(model.state_dict()[param_tensor])
-    print(weights)
-
-# Initialisieren Sie TenSeal Context
-bits_scale = 26
-
-# Create TenSEAL context
-context = ts.context(
-    ts.SCHEME_TYPE.CKKS,
-    poly_modulus_degree=8192,
-    coeff_mod_bit_sizes=[31, bits_scale, bits_scale, bits_scale, bits_scale, bits_scale, bits_scale, 31]
-)
-
-# set the scale
-context.global_scale = pow(2, bits_scale)
-
-# galois keys are required to do ciphertext rotations
-context.generate_galois_keys()
-
-ser_ctx = b64encode(context.serialize()).decode()
-global ctx
-ctx = ser_ctx
-# Erstellen Sie ein Tensor-Objekt für jeden Gewichtstensor und verschlüsseln Sie es
-global weights_lists
-encrypted_weights = []
-weights_lists = []
-n = 0
-for weight in weights:
-    new = []
-    print(param_ten)
-    new.append(param_ten[n])
-    n = n + 1
-    print(weight)
-    print(weight.numpy().shape)
-    if len(weight.numpy().shape) == 1:
-         encrypted_weight = ts.ckks_vector(context, j)
-         encrypted_weights.append(encrypted_weight)
-         new.append(encrypted_weight)
-    else:
-        for w in weight.numpy():
-            print("Hier")
-            print(len(w.shape))
-            if len(w.shape) == 1:
-                 encrypted_weight = ts.ckks_vector(context, w)
-                 vec = encrypted_weight.serialize()
-                 vec_new = b64encode(vec).decode()
-                 new.append(vec_new)
-                 encrypted_weights.append(encrypted_weight)
-            else:
-                for i in w:
-                    print("Dort")
-                    print(i.shape)
-                    if len(i.shape) == 1:
-                         encrypted_weight = ts.ckks_vector(context, i)
-                         vec = encrypted_weight.serialize()
-                         vec_new = b64encode(vec).decode()
-                         new.append(vec_new)
-                         encrypted_weights.append(encrypted_weight)
-                    else:
-                        for j in i:
-                            print("Dort2")
-                            print(j.shape)
-                            encrypted_weight = ts.ckks_vector(context, j)
-                            print(encrypted_weight)
-                            vec = encrypted_weight.serialize()
-                            vec_new = b64encode(vec).decode()
-                            new.append(vec_new)
-                            encrypted_weights.append(encrypted_weight)
-    print("NEW")
-    print(new)
-    #Liste an Gewichten und darauf Tensoren
-    weights_lists.append(new)
-print(weights_lists)
-#print(encrypted_weights)
-#Hier verschlüsseln?
+torch.save(model.state_dict(), "model.pt")
 #global updated
 #updated = pickle.dumps(model.state_dict())
 #print(updated)
