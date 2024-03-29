@@ -106,7 +106,7 @@ def learn():
     data = req
     vectors = []
     #Jeden Vektor wieder b64 dekodieren
-    for d in data['ckks_vector']:
+    for d in data['ckks_vector']: 
         ck_vector = b64decode(d)
         vectors.append(ck_vector)
     window = data['windows']
@@ -117,8 +117,8 @@ def learn():
     enc_v = []
     #Rekonstruieren der Vektoren
     for vec in vectors:
-        enc_vec = ts.ckks_vector_from(ctx_d, vec)
-        enc_v.append(enc_vec)
+       enc_vec = ts.ckks_vector_from(ctx_d, vec) 
+       enc_v.append(enc_vec)
     print("<p>There are vectors again!</p>")
     #Liste mit verschlüsselten Vektoren env_v
     enc_model = EncConvNet(model)
@@ -129,9 +129,9 @@ def learn():
         vec = enc.serialize()
         vec_new = b64encode(vec).decode()
         learned.append(vec_new)
-
+    
     data = {
-        "learned_data": learned,
+        "learned_data": learned, 
         "context" : data['context']
     }
     global encrypted_result
@@ -155,7 +155,7 @@ def enc_p():
     data = request.get_json()
     vectors = []
     #Jeden Vektor wieder b64 dekodieren
-    for d in data['ckks_vector']:
+    for d in data['ckks_vector']: 
         ck_vector = b64decode(d)
         vectors.append(ck_vector)
     #Kontext dekodieren
@@ -165,9 +165,9 @@ def enc_p():
     enc_v = []
     #Rekonstruieren der Vektoren
     for vec in vectors:
-        enc_vec = ts.ckks_vector_from(ctx_d, vec)
-        #enc_vec.decrypt()
-        enc_v.append(enc_vec)
+       enc_vec = ts.ckks_vector_from(ctx_d, vec) 
+       #enc_vec.decrypt()
+       enc_v.append(enc_vec)
     #Liste mit verschlüsselten Vektoren env_v
     enc_model = EncConvNet(model)
     enc_learned = enc_test(enc_v, enc_model)
@@ -176,7 +176,7 @@ def enc_p():
         vec = enc.serialize()
         vec_new = b64encode(vec).decode()
         learned.append(vec_new)
-
+    
     data = {
         "learned_data": learned
     }
