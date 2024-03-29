@@ -29,6 +29,9 @@ The first requests are to initialize the model on the server side and to set the
 
 **Configuration**
 
+*Clients*:
+To extend the scenario with more clients, at the current state you have to clone the repository for each client. The clients are numbered and the number is transferred to the server as a variable. If you want to change the number or add more clients you have to adapt the body of the "Start the transfer Copy" request. The base-url contains the number. For example: "baseUrl": "http://localhost:7000/federatedinput?client=1". How many feedbacks the server should receive before averaging is set in the "/fedavg" request. For example: "http://localhost:7000/fedavg?clients=2".
+
 *Connector*:
 For the setup the Eclipse Dataspace Connector is used (https://github.com/eclipse-edc/Connector). It is extended with the control plane, data plane, configuration, and management extension which provides the possibility for configuration. 
 In our setup the first consumer connector is configured with [consumer.properties](federated-try-connector/consumer.properties), the second consumer connector is configured with [consumer2.properties](federated-try-connector/consumer2.properties) and the provider connector with [provider.properties](federated-try-connector/provider.properties).
