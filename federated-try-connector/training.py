@@ -53,6 +53,7 @@ buffer.seek(0)
 # Lade das Modell aus dem Puffer
 loaded_model = torch.load(buffer, map_location=torch.device('cpu'))
 #model = torch.load(pickload)
+print("The loaded model is:: ")
 print(loaded_model)
 model = co.ConvNet()
 model.load_state_dict(loaded_model)

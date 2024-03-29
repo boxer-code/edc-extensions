@@ -3,7 +3,7 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 import numpy as np
 
-torch.manual_seed(73)
+#torch.manual_seed(73)
 
 train_data = datasets.MNIST('data', train=True, download=True, transform=transforms.ToTensor())
 test_data = datasets.MNIST('data', train=False, download=True, transform=transforms.ToTensor())
