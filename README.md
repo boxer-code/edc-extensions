@@ -9,8 +9,8 @@ jep (https://github.com/ninia/jep) has to be installed. If not, *pip install jep
 
 **Federated learning Setup**
 -------------------
-The setup contains one server whichs serves as a federator and initiliazes the net and distributes it to the clients. The training process takes place on client side. Afterwards the updated weights are sent to the server, which aggregates the weights and send the average as a new model back to the clients. 
-Our test-scenario contains two clients but is easy to extend if more clients are needed. The client is initialize with a first net from the server and the training takes place locally.
+The setup contains one server which serves as a federator and initializes the net and distributes it to the clients. The training process takes place on the client side. Afterwards the updated weights are sent to the server, which aggregates the weights and sends the average as a new model back to the clients. 
+Our test-scenario contains two clients but is easy to extend if more clients are needed. The client is initialized with a first net from the server and the training takes place locally.
 To show the functionality of this extension we are using a small convolutional net with 3 layers. 
 
 Setup start:
@@ -24,15 +24,15 @@ Setup start:
 8. To start the ML-Service: python3 ML.py
 
 Transfer steps:
-To perform two rounds of federated learning a postman collection is given ([postman collection for two rounds of federated learning](federated-try-connector/Federated-learning-two-rounds.postman_collection.json)). First you have to adapt the "pfadjep" variable to your full path to the python files. If you want to run the whole collection, you should set the delay to 2000ms. For example: "/home/{User}/edc-extensions-self/federated-try-connector".
-The first request is to initialize the model on server side and to set the jep config on both clients. Afterwards a data offering is created and all the necessary structures therefore. The clients negotiate a contract with the server and download the first model. Afterwards they train it and create another data offering, containing the model updates. The server negotiates a contract with the clients and get the model updates to average them and send them back through a data offering. The contracts can be reused for more rounds of federated learning. Also the collection can simply run another round. 
+To perform two rounds of federated learning a postman collection is given ([postman collection for two rounds of federated learning](federated-try-connector/Federated-learning-two-rounds.postman_collection.json)). First you have to adapt the "pfadjep" variable to your full path to the python files. For example: "/home/{User}/edc-extensions-self/federated-try-connector". If you want to run the whole collection, you should set the delay to 2000ms.
+The first requests are to initialize the model on the server side and to set the jep config on both clients. Afterwards a data offering is created and all the necessary structures for it. The clients negotiate a contract with the server and download the first model. Afterwards they train it and create another data offering, containing the model updates. The server negotiates a contract with the clients and gets the model updates to average them and send them back through a data offering. The contracts can be reused for more rounds of federated learning. Also the collection can simply run another round. 
 
 **Configuration**
 
 *Connector*:
-For the setup the Eclipse Dataspace Connector is used (https://github.com/eclipse-edc/Connector). It is extended with the control plane, data plane, configuration, management extension which provide the possibility for configuration. 
-In our Setup the first consumer connector is configured with [consumer.properties](federated-try-connector/consumer.properties), the second consumer connector is configured with [consumer2.properties](federated-try-connector/consumer2.properties) and the provider connector with [provider.properties](federated-try-connector/provider.properties).
-The extension for encryption is managed by the *web.http.port* and the *web.http.path*. 
+For the setup the Eclipse Dataspace Connector is used (https://github.com/eclipse-edc/Connector). It is extended with the control plane, data plane, configuration, and management extension which provides the possibility for configuration. 
+In our setup the first consumer connector is configured with [consumer.properties](federated-try-connector/consumer.properties), the second consumer connector is configured with [consumer2.properties](federated-try-connector/consumer2.properties) and the provider connector with [provider.properties](federated-try-connector/provider.properties).
+The federated-learning extension is managed by the *web.http.port* and the *web.http.path*. 
 
 *Machine learning*:
 In the future it should be possible to fully exchange the model without any big modifications. At the current stage we haven't tried to change the model. It is specified in [convnet.py](federated-try-connector/convnet.py). The training is specified in [training.py](federated-try-connector/training.py).
