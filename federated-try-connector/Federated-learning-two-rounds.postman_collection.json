@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "f16a7841-a683-44b1-9b8b-a039feb49fc4",
-		"name": "Federated learning two rounds",
+		"_postman_id": "dd2edca1-5729-4690-937d-5b333b8ff388",
+		"name": "Federated learning two rounds Copy 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26869261"
 	},
@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "/home/kuhlmann/SiDaKo-EDC/federated-try-connector",
+					"raw": "{{pfadjep}}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -61,7 +61,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "/home/kuhlmann/SiDaKo-EDC2/federated-try-connector",
+					"raw": "{{pfadjep}}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1763,6 +1763,28 @@
 			"response": []
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "contract negotiation",
@@ -1779,6 +1801,11 @@
 		{
 			"key": "contract agreement2",
 			"value": ""
+		},
+		{
+			"key": "pfadjep",
+			"value": "/home/kuhlmann/edc-extensions-self/federated-try-connector",
+			"type": "string"
 		}
 	]
 }

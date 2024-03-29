@@ -1,57 +1,41 @@
+Welcome to the MeLtcryption edc extensions repository!
+
+This repository should contain custom extensions developed for the "Eclipse Dataspace Connector" to enhance the functionality for privacy preserving machine learning. As this repository represents the initial transition of custom extensions from a private development environment to a public repository, so far only the extension for federated learning has been developed and transferred far enough and is presented here. 
+
 **Quick start**
 --------------------------------
 Make sure that Java 17 is installed and the JAVA__HOME variable is set correctly.
 jep (https://github.com/ninia/jep) has to be installed. If not, *pip install jep*.
 
-**CNN Setup**
+**Federated learning Setup**
 -------------------
-To perform the encryption TenSeal (https://github.com/OpenMined/TenSEAL) is used.
+The setup contains one server which serves as a federator and initializes the net and distributes it to the clients. The training process takes place on the client side. Afterwards the updated weights are sent to the server, which aggregates the weights and sends the average as a new model back to the clients. 
+Our test-scenario contains two clients but is easy to extend if more clients are needed. The client is initialized with a first net from the server and the training takes place locally.
+To show the functionality of this extension we are using a small convolutional net with 3 layers. 
 
 Setup start:
-1. Clone this repository.
-2. cd SiDaKo-EDC
-3. To build the jar-files: ./gradlew clean cnn:build
-4. To start the consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/SiDaKo-EDC/cnn/consumer.properties  -jar cnn/build/libs/filesystem-config-connector.jar
-5. To start the provider connector: java -Djava.library.path={path to jep installation] -Dedc.fs.config=/{path to cloned repo}/SiDaKo-EDC/cnn/provider.properties  -jar cnn/build/libs/filesystem-config-connector.jar
-6. cd Machine-Learning
-7. To start the ML-Service: python3 ML.py
+1. Clone this repository two times (in a real world scenario clients would be on different machines).
+2. cd edc-extensions
+3. To build the jar-files: ./gradlew clean federated-try-connector:build
+4. To start the first consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions/federated-try-connector/consumer.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+5. (In a new terminal window) To start the second consumer connector the second repository is needed: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions2/federated-try-connector/consumer2.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+6. (In a new terminal window) To start the provider connector: java -Djava.library.path={path to jep installation] -Dedc.fs.config=/{path to cloned repo}/edc-extensions/federated-try-connector/provider.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+7. (In a new terminal window) cd Machine-Learning
+8. To start the ML-Service: python3 ML.py
 
 Transfer steps:
-1. Data encryption: curl --location 'http://localhost:8181/api/input'
-2. Data offering with encrypted data: [Postman script for encryption](cnn/postman-encryption.json)
-3. Classification of encrypted values: curl --location 'http://localhost:7000/learn'
-4. Data offering with encrypted results: [Postman script for decryption](cnn/postman-decryption.json)
-5. Decryption: curl --location 'http://localhost:8181/api/decrpyt'
-
-Results are stored in result_learning.txt.
+To perform two rounds of federated learning a postman collection is given ([postman collection for two rounds of federated learning](federated-try-connector/Federated-learning-two-rounds.postman_collection.json)). First you have to adapt the "pfadjep" variable to your full path to the python files. For example: "/home/{User}/edc-extensions-self/federated-try-connector". If you want to run the whole collection, you should set the delay to 2000ms.
+The first requests are to initialize the model on the server side and to set the jep config on both clients. Afterwards a data offering is created and all the necessary structures for it. The clients negotiate a contract with the server and download the first model. Afterwards they train it and create another data offering, containing the model updates. The server negotiates a contract with the clients and gets the model updates to average them and send them back through a data offering. The contracts can be reused for more rounds of federated learning. Also the collection can simply run another round. 
 
 **Configuration**
 
+*Clients*:
+To extend the scenario with more clients, at the current state you have to clone the repository for each client. The clients are numbered and the number is transferred to the server as a variable. If you want to change the number or add more clients you have to adapt the body of the "Start the transfer Copy" request. The base-url contains the number. For example: "baseUrl": "http://localhost:7000/federatedinput?client=1". How many feedbacks the server should receive before averaging is set in the "/fedavg" request. For example: "http://localhost:7000/fedavg?clients=2".
+
 *Connector*:
-For the setup the Eclipse Dataspace Connector is used (https://github.com/eclipse-edc/Connector). It is extended with the control plane, data plane, configuration, management extension which provide the possibility for configuration. 
-In our Setup the consumer connector is configured with [consumer.properties](connector-extension/consumer.properties) and the provider connector with [provider.properties](connector-extension/provider.properties).
-The extension for encryption is managed by the *web.http.port* and the *web.http.path*. 
+For the setup the Eclipse Dataspace Connector is used (https://github.com/eclipse-edc/Connector). It is extended with the control plane, data plane, configuration, and management extension which provides the possibility for configuration. 
+In our setup the first consumer connector is configured with [consumer.properties](federated-try-connector/consumer.properties), the second consumer connector is configured with [consumer2.properties](federated-try-connector/consumer2.properties) and the provider connector with [provider.properties](federated-try-connector/provider.properties).
+The federated-learning extension is managed by the *web.http.port* and the *web.http.path*. 
 
-*Encryption*:
-In [App.py](connector-extension/src/main/java/org/eclipse/edc/extension/health/App.py) the number of random MNIST-Values is configured. As default 500 values should be encrypted. 
-*Machine-Learning*: TODO
-
-**Linear-Regression**
--------------------
-To perform the encryption the palliere encryption system is used. 
-
-Setup start: 
-1. Clone this repository.
-2. cd SiDaKo-EDC
-4. To build the jar-files: ./gradlew clean linear-regression:build
-5. To start the consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/SiDaKo-EDC/linear-regression/consumer.properties  -jar linear-regression/build/libs/filesystem-config-connector.jar
-6. To start the provider connector: java -Djava.library.path={path to jep installation] -Dedc.fs.config={path to cloned repo}/SiDaKo-EDC/linear-regression/provider.properties  -jar linear-regression/build/libs/filesystem-config-connector.jar
-7. cd Machine-Learning
-8. To start the ML-Service: python3 Classifier.py
-
-Transfer steps:
-1. Data encryption: [Postman script for encryption](linear-regression/encryption-lr.postman_collection.json)
-2. Data decrytion: [Postman script for decryption](linear-regression/decryption-lr.postman_collection.json)
-
-**Configuration**:
-You need to adapt the path to the python files in the bhody of the first request of the encryption script to your own file-system. The to-be-encrypted-data is configured by parametrisation of the access-url from the asset holding the encrypted data. 
+*Machine learning*:
+In the future it should be possible to fully exchange the model without any big modifications. At the current stage we haven't tried to change the model. It is specified in [convnet.py](federated-try-connector/convnet.py). The training is specified in [training.py](federated-try-connector/training.py).
