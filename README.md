@@ -14,31 +14,25 @@ Our test-scenario contains two clients but is easy to extend if more clients are
 To show the functionality of this extension we are using a small convolutional net with 3 layers. 
 
 Setup start:
-1. Clone this repository two times.
+1. Clone this repository two times (in a real world scenario clients would be on different machines).
 2. cd edc-extensions
 3. To build the jar-files: ./gradlew clean federated-try-connector:build
-4. To start the first consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions/federated-try-connector/consumer.properties  -jar cnn/build/libs/filesystem-config-connector.jar
-5. (In a new terminal window) To start the second consumer connector the second repository is needed: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions2/federated-try-connector/consumer2.properties  -jar cnn/build/libs/filesystem-config-connector.jar
-6. (In a new terminal window) To start the provider connector: java -Djava.library.path={path to jep installation] -Dedc.fs.config=/{path to cloned repo}/edc-extensions/federated-try-connector/provider.properties  -jar cnn/build/libs/filesystem-config-connector.jar
+4. To start the first consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions/federated-try-connector/consumer.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+5. (In a new terminal window) To start the second consumer connector the second repository is needed: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions2/federated-try-connector/consumer2.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+6. (In a new terminal window) To start the provider connector: java -Djava.library.path={path to jep installation] -Dedc.fs.config=/{path to cloned repo}/edc-extensions/federated-try-connector/provider.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
 7. (In a new terminal window) cd Machine-Learning
 8. To start the ML-Service: python3 ML.py
 
 Transfer steps:
-1. Data encryption: curl --location 'http://localhost:8181/api/input'
-2. Data offering with encrypted data: [Postman script for encryption](cnn/postman-encryption.json)
-3. Classification of encrypted values: curl --location 'http://localhost:7000/learn'
-4. Data offering with encrypted results: [Postman script for decryption](cnn/postman-decryption.json)
-5. Decryption: curl --location 'http://localhost:8181/api/decrpyt'
-
-Results are stored in result_learning.txt.
+To perform two rounds of federated learning a postman collection is given ([postman collection for two rounds of federated learning](federated-try-connector/Federated-learning-two-rounds.postman_collection.json)). First you have to adapt the "pfadjep" variable to your full path to the python files. For example: "/home/{User}/edc-extensions-self/federated-try-connector".
+The first request is to initialize the model on server side and to set the jep config on both clients. Afterwards a data offering is created and all the necessary structures therefore. The clients negotiate a contract with the server and download the first model. Afterwards they train it and create another data offering, containing the model updates. The server negotiates a contract with the clients and get the model updates to average them and send them back through a data offering. The contracts can be reused for more rounds of federated learning. Also the collection can simply run another round. 
 
 **Configuration**
 
 *Connector*:
 For the setup the Eclipse Dataspace Connector is used (https://github.com/eclipse-edc/Connector). It is extended with the control plane, data plane, configuration, management extension which provide the possibility for configuration. 
-In our Setup the consumer connector is configured with [consumer.properties](connector-extension/consumer.properties) and the provider connector with [provider.properties](connector-extension/provider.properties).
+In our Setup the first consumer connector is configured with [consumer.properties](federated-try-connector/consumer.properties), the second consumer connector is configured with [consumer2.properties](federated-try-connector/consumer2.properties) and the provider connector with [provider.properties](federated-try-connector/provider.properties).
 The extension for encryption is managed by the *web.http.port* and the *web.http.path*. 
 
-*Encryption*:
-In [App.py](connector-extension/src/main/java/org/eclipse/edc/extension/health/App.py) the number of random MNIST-Values is configured. As default 500 values should be encrypted. 
-*Machine-Learning*: TODO
+*Machine learning*:
+In the future it should be possible to fully exchange the model without any big modifications. At the current stage we haven't tried to change the model. It is specified in [convnet.py](federated-try-connector/convnet.py). The training is specified in [training.py](federated-try-connector/training.py).
