@@ -24,7 +24,7 @@ Setup start:
 8. To start the ML-Service: python3 ML.py
 
 Transfer steps:
-To perform two rounds of federated learning a postman collection is given ([postman collection for two rounds of federated learning](federated-try-connector/Federated-learning-two-rounds.postman_collection.json)). First you have to adapt the "pfadjep" variable to your full path to the python files. For example: "/home/{User}/edc-extensions-self/federated-try-connector".
+To perform two rounds of federated learning a postman collection is given ([postman collection for two rounds of federated learning](federated-try-connector/Federated-learning-two-rounds.postman_collection.json)). First you have to adapt the "pfadjep" variable to your full path to the python files. If you want to run the whole collection, you should set the delay to 2000ms. For example: "/home/{User}/edc-extensions-self/federated-try-connector".
 The first request is to initialize the model on server side and to set the jep config on both clients. Afterwards a data offering is created and all the necessary structures therefore. The clients negotiate a contract with the server and download the first model. Afterwards they train it and create another data offering, containing the model updates. The server negotiates a contract with the clients and get the model updates to average them and send them back through a data offering. The contracts can be reused for more rounds of federated learning. Also the collection can simply run another round. 
 
 **Configuration**
