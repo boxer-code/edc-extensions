@@ -99,8 +99,6 @@ def getmodel():
     #Jedes Mal wenn das Model angefordert wird, wird von einem neuen Client ausgegangen
     return dumped
 
-<<<<<<< HEAD
-=======
 @app.get("/learn")
 def learn():
     data = req
@@ -183,7 +181,6 @@ def enc_p():
     print("<p>Successfully learned and ready to send back the data!</p>")
     return data
 
->>>>>>> 0bfc2a2d467bb83ca749b801d53aded94f08f22f
 @app.get("/test")
 def enc_lr():
     with open('data.json', 'r') as file:
