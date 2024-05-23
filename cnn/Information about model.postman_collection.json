@@ -1,0 +1,327 @@
+{
+	"info": {
+		"_postman_id": "dceee108-13ae-4088-91b3-6eab24e7abac",
+		"name": "Information about model",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26869261"
+	},
+	"item": [
+		{
+			"name": "Register Provider Data Plane Instance",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"@context\": {\r\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\r\n    },\r\n    \"@id\": \"http-pull-provider-dataplane\",\r\n    \"url\": \"http://localhost:18183/control/transfer\",\r\n    \"allowedSourceTypes\": [\r\n        \"HttpData\"\r\n    ],\r\n    \"allowedDestTypes\": [\r\n        \"HttpData\"\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:18181/management/v2/dataplanes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18181",
+					"path": [
+						"management",
+						"v2",
+						"dataplanes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an Asset on the provider side",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n    },\n    \"@id\": \"assetId\",\n    \"properties\": {\n        \"name\": \"product description\",\n        \"contenttype\": \"application/json\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"name\": \"Test asset\",\n        \"baseUrl\": \"http://localhost:7000/data\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:18181/management/v3/assets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18181",
+					"path": [
+						"management",
+						"v3",
+						"assets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Policy on the Provider",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n           \"@context\": {\n             \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n             \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n           },\n           \"@id\": \"aPolicy\",\n           \"policy\": {\n             \"@type\": \"set\",\n             \"odrl:permission\": [],\n             \"odrl:prohibition\": [],\n             \"odrl:obligation\": []\n           }\n         }"
+				},
+				"url": {
+					"raw": "http://localhost:18181/management/v2/policydefinitions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18181",
+					"path": [
+						"management",
+						"v2",
+						"policydefinitions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a contract definition on Provider",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n           \"@context\": {\n             \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n           },\n           \"@id\": \"1\",\n           \"accessPolicyId\": \"aPolicy\",\n           \"contractPolicyId\": \"aPolicy\",\n           \"assetsSelector\": []\n         }"
+				},
+				"url": {
+					"raw": "http://localhost:18181/management/v2/contractdefinitions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18181",
+					"path": [
+						"management",
+						"v2",
+						"contractdefinitions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "How to fetch catalog on consumer side",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n      \"@context\": {\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n      },\n      \"providerUrl\": \"http://localhost:18182/protocol\",\n      \"protocol\": \"dataspace-protocol-http\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:28181/management/v2/catalog/request",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28181",
+					"path": [
+						"management",
+						"v2",
+						"catalog",
+						"request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Negotiate a contract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Retrieve contract negotiation\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"contract negotiation\", jsonData[\"@id\"])",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"@context\": {\n    \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n    \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n  },\n  \"@type\": \"NegotiationInitiateRequestDto\",\n  \"connectorId\": \"consumer\",\n  \"connectorAddress\": \"http://localhost:18182/protocol\",\n  \"consumerId\": \"provider\",\n  \"providerId\": \"consumer\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"offer\": {\n   \"offerId\": \"MQ==:YXNzZXRJZA==:YTc4OGEwYjMtODRlZi00NWYwLTgwOWQtMGZjZTMwMGM3Y2Ey\",\n   \"assetId\": \"assetId\",\n   \"policy\": {\n     \"@id\": \"MQ==:YXNzZXRJZA==:YTc4OGEwYjMtODRlZi00NWYwLTgwOWQtMGZjZTMwMGM3Y2Ey\",\n     \"@type\": \"Set\",\n     \"odrl:permission\": [],\n     \"odrl:prohibition\": [],\n     \"odrl:obligation\": [],\n     \"odrl:target\": \"assetId\"\n   }\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:28181/management/v2/contractnegotiations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28181",
+					"path": [
+						"management",
+						"v2",
+						"contractnegotiations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting the contract agreement id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Retrieve contract agreement\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"contract agreement\", jsonData[\"contractAgreementId\"])",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:28181/management/v2/contractnegotiations/{{contract negotiation}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28181",
+					"path": [
+						"management",
+						"v2",
+						"contractnegotiations",
+						"{{contract negotiation}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start the transfer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Retrieve transfer id\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"transfer id\", jsonData[\"@id\"])",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TransferRequest\",\n  \"dataDestination\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"http://localhost:8181/api/encrypted\"\n  },\n  \"protocol\": \"dataspace-protocol-http\",\n  \"assetId\": \"assetId\",\n  \"contractId\": \"{{contract agreement}}\",\n  \"connectorId\": \"consumer\",\n  \"counterPartyAddress\": \"http://localhost:18182/protocol\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:28181/management/v2/transferprocesses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28181",
+					"path": [
+						"management",
+						"v2",
+						"transferprocesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check the transfer status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28181/management/v2/transferprocesses/{{transfer id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28181",
+					"path": [
+						"management",
+						"v2",
+						"transferprocesses",
+						"{{transfer id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "contract negotiation",
+			"value": ""
+		},
+		{
+			"key": "contract agreement",
+			"value": ""
+		},
+		{
+			"key": "transfer id",
+			"value": ""
+		}
+	]
+}

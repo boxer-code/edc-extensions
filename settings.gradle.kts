@@ -31,3 +31,4 @@ dependencyResolutionManagement {
 include(":federated-try-connector")
 include(":federated-try-connector-consumer")
 include(":listener")
+include(":cnn")
