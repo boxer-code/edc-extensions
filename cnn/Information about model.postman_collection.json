@@ -255,7 +255,8 @@
 							"    pm.collectionVariables.set(\"transfer id\", jsonData[\"@id\"])",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -269,7 +270,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TransferRequest\",\n  \"dataDestination\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"http://localhost:8181/api/encrypted\"\n  },\n  \"protocol\": \"dataspace-protocol-http\",\n  \"assetId\": \"assetId\",\n  \"contractId\": \"{{contract agreement}}\",\n  \"connectorId\": \"consumer\",\n  \"counterPartyAddress\": \"http://localhost:18182/protocol\"\n}"
+					"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TransferRequest\",\n  \"dataDestination\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"http://localhost:8181/api/kernel\"\n  },\n  \"protocol\": \"dataspace-protocol-http\",\n  \"assetId\": \"assetId\",\n  \"contractId\": \"{{contract agreement}}\",\n  \"connectorId\": \"consumer\",\n  \"counterPartyAddress\": \"http://localhost:18182/protocol\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:28181/management/v2/transferprocesses",
