@@ -13,7 +13,7 @@ Setup start:
 8. Set-up the postman jep variable: If you want to use postman for the next steps, you have to set the pfadjep variable to your path to the python files (something like: {path to cloned repo}/SiDaKo-EDC/cnn/src/main/java/org/eclipse/edc/extension/ne).
 
 Transfer steps:
-1. Transferring the necessary informations about the model to the data provider: [Postman script for model informations](Information about model.postman_collection.json)
+1. Transferring the necessary informations about the model to the data provider: [Postman script for model informations](Information-about-model.postman_collection.json)
 1. Data encryption: [Postman script for encryption](http-http-encryption.postman_collection.json)
 2. Encrypted Machine-Learning and decryption: [Postman script for decryption](http-http-decryption.postman_collection.json)
 
