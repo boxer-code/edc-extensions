@@ -7,4 +7,12 @@ This repository should contain custom extensions developed for the "Eclipse Data
 Make sure that Java 17 is installed and the JAVA__HOME variable is set correctly.
 jep (https://github.com/ninia/jep) has to be installed. If not, *pip install jep*.
 
-*WIP* Should be mentioned here: Clone repo (two times for federeated learning), cd edc-extensions, build jar files adapted to the requested setup, machine learning can be started as well
+Setup start:
+
+1. Clone this repo (for the federated setup you need to clone the repo two times, in a real world scenario clients would be on different machines).
+2. cd edc-extensions
+3. Build the jar-files: ./gradlew clean federated-learning:build (federated setup), ./gradlew clean cnn:build (encrypted machine learning setup)
+4. Detailed instructions for further steps in [federated setup](federated-learning), [encryption setup](cnn).
+
+
+
