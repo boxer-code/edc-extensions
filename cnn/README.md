@@ -1,16 +1,13 @@
-**CNN Setup**
+**Encryption Setup (CNN)**
 -------------------
 To perform the encryption TenSeal (https://github.com/OpenMined/TenSEAL) is used.
 
 Setup start:
-1. Clone this repository.
-2. cd SiDaKo-EDC
-3. To build the jar-files: ./gradlew clean cnn:build
-4. To start the consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config=/{path to cloned repo}/edc-extensions-self/cnn/consumer.properties  -jar cnn/build/libs/filesystem-config-connector.jar
-5. To start the provider connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config=/{path to cloned repo}/edc-extensions-self/cnn/provider.properties  -jar cnn/build/libs/filesystem-config-connector.jar
-6. cd Machine-Learning
-7. To start the ML-Service: python3 ML.py
-8. Set-up the postman jep variable: If you want to use postman for the next steps, you have to set the pfadjep variable to your path to the python files (something like: {path to cloned repo}/SiDaKo-EDC/cnn/src/main/java/org/eclipse/edc/extension/ne).
+1. To start the consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config=/{path to cloned repo}/edc-extensions-self/cnn/consumer.properties  -jar cnn/build/libs/filesystem-config-connector.jar
+2. To start the provider connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config=/{path to cloned repo}/edc-extensions-self/cnn/provider.properties  -jar cnn/build/libs/filesystem-config-connector.jar
+3. cd Machine-Learning
+4. To start the ML-Service: python3 ML.py
+5. Set-up the postman jep variable: If you want to use postman for the next steps, you have to set the pfadjep variable to your path to the python files (something like: {path to cloned repo}/SiDaKo-EDC/cnn/src/main/java/org/eclipse/edc/extension/ne).
 
 Transfer steps:
 1. Transferring the necessary informations about the model to the data provider: [Postman script for model informations](Information-about-model.postman_collection.json)
