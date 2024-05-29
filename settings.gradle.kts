@@ -28,7 +28,7 @@ dependencyResolutionManagement {
     }
 }
 
-include(":federated-try-connector")
-include(":federated-try-connector-consumer")
+include(":federated-learning-connector")
+include(":federated-learning-consumer")
 include(":listener")
 include(":cnn")
