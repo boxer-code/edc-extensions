@@ -5,14 +5,11 @@ Our test-scenario contains two clients but is easy to extend if more clients are
 To show the functionality of this extension we are using a small convolutional net with 3 layers. 
 
 Setup start:
-1. Clone this repository two times (in a real world scenario clients would be on different machines).
-2. cd edc-extensions
-3. To build the jar-files: ./gradlew clean federated-try-connector:build
-4. To start the first consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions/federated-try-connector/consumer.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
-5. (In a new terminal window) To start the second consumer connector the second repository is needed: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions2/federated-try-connector/consumer2.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
-6. (In a new terminal window) To start the provider connector: java -Djava.library.path={path to jep installation] -Dedc.fs.config=/{path to cloned repo}/edc-extensions/federated-try-connector/provider.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
-7. (In a new terminal window) cd Machine-Learning
-8. To start the ML-Service: python3 ML.py
+1. To start the first consumer connector: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions/federated-try-connector/consumer.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+2. (In a new terminal window) To start the second consumer connector the second repository is needed: java -Djava.library.path={path to jep installation} -Dedc.fs.config={path to cloned repo}/edc-extensions2/federated-try-connector/consumer2.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+3. (In a new terminal window) To start the provider connector: java -Djava.library.path={path to jep installation] -Dedc.fs.config=/{path to cloned repo}/edc-extensions/federated-try-connector/provider.properties  -jar federated-try-connector/build/libs/filesystem-config-connector.jar
+4. (In a new terminal window) cd Machine-Learning
+5. To start the ML-Service: python3 ML.py
 
 Transfer steps:
 To perform two rounds of federated learning a postman collection is given ([postman collection for two rounds of federated learning](federated-try-connector/Federated-learning-two-rounds.postman_collection.json)). First you have to adapt the "pfadjep" variable to your full path to the python files. For example: "/home/{User}/edc-extensions-self/federated-try-connector". If you want to run the whole collection, you should set the delay to 2000ms.
