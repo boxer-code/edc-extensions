@@ -16,6 +16,9 @@ Transfer steps:
 
 Results are stored in result_learning.txt.
 
+Data flow:
+![Sequence diagram of the data flow during the encrypted machine learning.](https://github.com/boxer-code/edc-extensions/blob/test/images/Encryption-workflow.png)
+
 **Configuration**
 
 *Connector*:

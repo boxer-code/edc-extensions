@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "430aab25-4922-4e33-9067-920ab4aa58da",
+		"_postman_id": "87101eee-0603-4f22-b6c4-b138ac606175",
 		"name": "http-http-decryption",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26869261"
@@ -12,12 +12,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:7000/learn",
+					"raw": "http://{{MLpath}}/learn",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{MLpath}}"
 					],
-					"port": "7000",
 					"path": [
 						"learn"
 					]
@@ -32,8 +31,7 @@
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"type": "default"
+						"value": "application/json"
 					}
 				],
 				"body": {
@@ -41,12 +39,11 @@
 					"raw": "{\r\n    \"@context\": {\r\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\r\n    },\r\n    \"@id\": \"http-pull-provider-dataplane\",\r\n    \"url\": \"http://localhost:18183/control/transfer\",\r\n    \"allowedSourceTypes\": [\r\n        \"HttpData\"\r\n    ],\r\n    \"allowedDestTypes\": [\r\n        \"HttpData\"\r\n    ]\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:18181/management/v2/dataplanes",
+					"raw": "http://{{PCon1}}/management/v2/dataplanes",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{PCon1}}"
 					],
-					"port": "18181",
 					"path": [
 						"management",
 						"v2",
@@ -71,12 +68,11 @@
 					"raw": "{\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n    },\n    \"@id\": \"assetId2\",\n    \"properties\": {\n        \"name\": \"product description\",\n        \"contenttype\": \"application/json\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"name\": \"Test asset\",\n        \"baseUrl\": \"http://localhost:7000/output\"\n    }\n}"
 				},
 				"url": {
-					"raw": "http://localhost:18181/management/v3/assets",
+					"raw": "http://{{PCon1}}/management/v3/assets",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{PCon1}}"
 					],
-					"port": "18181",
 					"path": [
 						"management",
 						"v3",
@@ -101,12 +97,11 @@
 					"raw": "{\n           \"@context\": {\n             \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n             \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n           },\n           \"@id\": \"aPolicy\",\n           \"policy\": {\n             \"@type\": \"set\",\n             \"odrl:permission\": [],\n             \"odrl:prohibition\": [],\n             \"odrl:obligation\": []\n           }\n         }"
 				},
 				"url": {
-					"raw": "http://localhost:18181/management/v2/policydefinitions",
+					"raw": "http://{{PCon1}}/management/v2/policydefinitions",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{PCon1}}"
 					],
-					"port": "18181",
 					"path": [
 						"management",
 						"v2",
@@ -131,12 +126,11 @@
 					"raw": "{\n           \"@context\": {\n             \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n           },\n           \"@id\": \"1\",\n           \"accessPolicyId\": \"aPolicy\",\n           \"contractPolicyId\": \"aPolicy\",\n           \"assetsSelector\": []\n         }"
 				},
 				"url": {
-					"raw": "http://localhost:18181/management/v2/contractdefinitions",
+					"raw": "http://{{PCon1}}/management/v2/contractdefinitions",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{PCon1}}"
 					],
-					"port": "18181",
 					"path": [
 						"management",
 						"v2",
@@ -161,12 +155,11 @@
 					"raw": "{\n      \"@context\": {\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n      },\n      \"providerUrl\": \"http://localhost:18182/protocol\",\n      \"protocol\": \"dataspace-protocol-http\"\n    }"
 				},
 				"url": {
-					"raw": "http://localhost:28181/management/v2/catalog/request",
+					"raw": "http://{{Con1}}/management/v2/catalog/request",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{Con1}}"
 					],
-					"port": "28181",
 					"path": [
 						"management",
 						"v2",
@@ -189,7 +182,8 @@
 							"    pm.collectionVariables.set(\"contract negotiation\", jsonData[\"@id\"])",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -206,12 +200,11 @@
 					"raw": "{\n  \"@context\": {\n    \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n    \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n  },\n  \"@type\": \"NegotiationInitiateRequestDto\",\n  \"connectorId\": \"consumer\",\n  \"connectorAddress\": \"http://localhost:18182/protocol\",\n  \"consumerId\": \"provider\",\n  \"providerId\": \"consumer\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"offer\": {\n   \"offerId\": \"MQ==:YXNzZXRJZDI=:OWMxYjhmZDAtOGJhZi00ZWY0LThkYWMtNTk2Mzk0OTU3MzIw\",\n   \"assetId\": \"assetId2\",\n   \"policy\": {\n     \"@id\": \"MQ==:YXNzZXRJZDI=:OWMxYjhmZDAtOGJhZi00ZWY0LThkYWMtNTk2Mzk0OTU3MzIw\",\n     \"@type\": \"Set\",\n     \"odrl:permission\": [],\n     \"odrl:prohibition\": [],\n     \"odrl:obligation\": [],\n     \"odrl:target\": \"assetId2\"\n   }\n  }\n}"
 				},
 				"url": {
-					"raw": "http://localhost:28181/management/v2/contractnegotiations",
+					"raw": "http://{{Con1}}/management/v2/contractnegotiations",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{Con1}}"
 					],
-					"port": "28181",
 					"path": [
 						"management",
 						"v2",
@@ -233,7 +226,8 @@
 							"    pm.collectionVariables.set(\"contract agreement\", jsonData[\"contractAgreementId\"])",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -246,12 +240,11 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:28181/management/v2/contractnegotiations/{{contract negotiation}}",
+					"raw": "http://{{Con1}}/management/v2/contractnegotiations/{{contract negotiation}}",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{Con1}}"
 					],
-					"port": "28181",
 					"path": [
 						"management",
 						"v2",
@@ -274,7 +267,8 @@
 							"    pm.collectionVariables.set(\"transfer id\", jsonData[\"@id\"])",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -291,12 +285,11 @@
 					"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TransferRequest\",\n  \"dataDestination\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"http://localhost:8181/api/encrypted\"\n  },\n  \"protocol\": \"dataspace-protocol-http\",\n  \"assetId\": \"assetId2\",\n  \"contractId\": \"{{contract agreement}}\",\n  \"connectorId\": \"consumer\",\n  \"counterPartyAddress\": \"http://localhost:18182/protocol\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:28181/management/v2/transferprocesses",
+					"raw": "http://{{Con1}}/management/v2/transferprocesses",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{Con1}}"
 					],
-					"port": "28181",
 					"path": [
 						"management",
 						"v2",
@@ -312,12 +305,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28181/management/v2/transferprocesses/{{transfer id}}",
+					"raw": "http://{{Con1}}/management/v2/transferprocesses/{{transfer id}}",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{Con1}}"
 					],
-					"port": "28181",
 					"path": [
 						"management",
 						"v2",
@@ -334,12 +326,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8181/api/decrypt",
+					"raw": "http://{{Ext1}}/api/decrypt",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{Ext1}}"
 					],
-					"port": "8181",
 					"path": [
 						"api",
 						"decrypt"
@@ -361,6 +352,22 @@
 		{
 			"key": "transfer id",
 			"value": ""
+		},
+		{
+			"key": "MLpath",
+			"value": "localhost:7000"
+		},
+		{
+			"key": "PCon1",
+			"value": "localhost:18181"
+		},
+		{
+			"key": "Con1",
+			"value": "localhost:28181"
+		},
+		{
+			"key": "Ext1",
+			"value": "localhost:8181"
 		}
 	]
 }
