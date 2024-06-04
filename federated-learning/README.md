@@ -16,7 +16,7 @@ To perform two rounds of federated learning a postman collection is given ([post
 The first requests are to initialize the model on the server side and to set the jep config on both clients. Afterwards a data offering is created and all the necessary structures for it. The clients negotiate a contract with the server and download the first model. Afterwards they train it and create another data offering, containing the model updates. The server negotiates a contract with the clients and gets the model updates to average them and send them back through a data offering. The contracts can be reused for more rounds of federated learning. Also the collection can simply run another round. 
 
 Data flow:
-![Sequence diagram of the data flow during the federated-learning.](https://github.com/boxer-code/edc-extensions/blob/test/images/federated-learning.png)
+![Sequence diagram of the data flow during the federated-learning.](https://github.com/boxer-code/edc-extensions/blob/main/images/federated-learning.png)
 
 **Configuration**
 
