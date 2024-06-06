@@ -184,14 +184,6 @@ def enc_p():
     print("<p>Successfully learned and ready to send back the data!</p>")
     return data
 
-@app.get("/test")
-def enc_lr():
-    with open('data.json', 'r') as file:
-        ans=json.load(file)
-    enc_model = EncConvNet(model)
-    enc_learned = enc_test(ans, enc_model)
-    return "Hier"
-
 @app.get("/output")
 def out():
     try:
